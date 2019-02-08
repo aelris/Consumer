@@ -13,14 +13,14 @@ class Consumer(val brokers: String,
                val topic: String) {
 
   val props: Properties = createConsumerConfig(brokers, groupId)
-  val consumer = new KafkaConsumer[String, String](props)
+  val kafkaConsumer = new KafkaConsumer[String, String](props)
   var executor: ExecutorService = null
 
 
 
   def shutdown(): Unit = {
-    if (consumer != null)
-      consumer.close()
+    if (kafkaConsumer != null)
+      kafkaConsumer.close()
     if (executor != null)
       executor.shutdown()
   }
@@ -38,12 +38,12 @@ class Consumer(val brokers: String,
   }
 
   def run(): Unit = {
-    consumer.subscribe(Collections.singletonList(this.topic))
+    kafkaConsumer.subscribe(Collections.singletonList(this.topic))
 
     Executors.newSingleThreadExecutor.execute(new Runnable {
       override def run(): Unit = {
         while (true) {
-          val records: ConsumerRecords[String, String] = consumer.poll(500)
+          val records: ConsumerRecords[String, String] = kafkaConsumer.poll(500)
 
           for (record <- records) {
             System.out.println("Received message: (" + record.key() + ", " + record.value() + ") at offset " + record.offset())
@@ -55,11 +55,8 @@ class Consumer(val brokers: String,
 }
 
 object Consumer extends App{
-
   val newArgs = Array("sandbox-hdp.hortonworks.com:6667", "consumer-1","StreamingTopic")
   val example = new Consumer(newArgs(0), newArgs(1), newArgs(2))
   example.run()
-  SparkJob.spark
-  SparkJob.dataFrameKafkaRecords
-  SparkJob.csvPath
+
 }
