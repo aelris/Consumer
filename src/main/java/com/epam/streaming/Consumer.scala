@@ -5,8 +5,6 @@ import java.util.concurrent._
 import java.util.{Collections, Properties}
 
 import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecords, KafkaConsumer}
-import org.apache.spark.sql.SparkSession
-import org.apache.spark.streaming.StreamingContext
 
 import scala.collection.JavaConversions._
 
@@ -57,10 +55,9 @@ class Consumer(val brokers: String,
 }
 
 object Consumer extends App{
-  var csvPath ="hdfs://sandbox-hdp.hortonworks.com:8020/homework/streaming"
-  val spark = SparkSession.builder().appName("Streaming").master("local[*]").getOrCreate()
-  val streamingContext = StreamingContext
+
   val newArgs = Array("sandbox-hdp.hortonworks.com:6667", "consumer-1","StreamingTopic")
   val example = new Consumer(newArgs(0), newArgs(1), newArgs(2))
   example.run()
+
 }
