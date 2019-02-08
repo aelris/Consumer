@@ -1,6 +1,6 @@
 package com.epam.streaming
 
-import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
+import org.apache.spark.sql.{DataFrame, SparkSession}
 
 
 object SparkJob {
@@ -17,8 +17,8 @@ object SparkJob {
       .format("kafka")
       .option("kafka.bootstrap.servers", "sandbox-hdp.hortonworks.com:6667")
       .option("subscribe", "StreamingTopic")
-      .load()
+      .csv(csvPath)
 
-    dataFrameKafkaRecords.write.mode(SaveMode.Append).csv(csvPath)
+//    dataFrameKafkaRecords.write.mode(SaveMode.Append).csv(csvPath)
   }
 }
