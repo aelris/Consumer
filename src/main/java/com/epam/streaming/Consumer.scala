@@ -17,7 +17,6 @@ class Consumer(val brokers: String,
   var executor: ExecutorService = null
 
 
-
   def shutdown(): Unit = {
     if (kafkaConsumer != null)
       kafkaConsumer.close()
@@ -34,7 +33,7 @@ class Consumer(val brokers: String,
     props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "30000")
     props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer")
     props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer")
-    props
+    return props
   }
 
   def run(): Unit = {
@@ -54,9 +53,9 @@ class Consumer(val brokers: String,
   }
 }
 
-object Consumer extends App{
-  val newArgs = Array("sandbox-hdp.hortonworks.com:6667", "consumer-1","StreamingTopic")
+object Consumer extends App {
+  val newArgs = Array("sandbox-hdp.hortonworks.com:6667", "consumer-1", "StreamingTopic")
   val example = new Consumer(newArgs(0), newArgs(1), newArgs(2))
   example.run()
-SparkJob.sparkJob()
+  SparkJob.sparkJob()
 }
