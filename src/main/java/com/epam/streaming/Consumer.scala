@@ -58,5 +58,5 @@ object Consumer extends App{
   val newArgs = Array("sandbox-hdp.hortonworks.com:6667", "consumer-1","StreamingTopic")
   val example = new Consumer(newArgs(0), newArgs(1), newArgs(2))
   example.run()
-
+SparkJob.sparkJob()
 }
