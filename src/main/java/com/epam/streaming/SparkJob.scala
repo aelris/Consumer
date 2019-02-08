@@ -6,7 +6,7 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 
 
 object SparkJob {
-  private var csvPath = "hdfs://sandbox-hdp.hortonworks.com:8020/homework/streaming"
+  private var csvPath = "hdfs://sandbox-hdp.hortonworks.com:8020/homework/streaming/streaming.csv"
 
   def sparkJob() {
 
