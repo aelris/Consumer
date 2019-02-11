@@ -8,8 +8,8 @@ import org.apache.hadoop.hdfs.DistributedFileSystem
 import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
 
 object SparkJob extends App {
-  private var csvPath = "hdfs://sandbox-hdp.hortonworks.com:8020/homework/streaming/"
-  private var topic = args{0}
+  private var csvPath = "hdfs://sandbox-hdp.hortonworks.com:8020/homework/streaming"
+  private var topic = args(0)
 
   def sparkJob() {
 
@@ -18,10 +18,15 @@ object SparkJob extends App {
       .master("local")
       .getOrCreate()
 
-    val fsConf =new Configuration()
+    val fsConf = new Configuration()
     fsConf.set("fs.hdfs.impl", classOf[DistributedFileSystem].getName)
     fsConf.set("fs.file.impl", classOf[LocalFileSystem].getName)
-    FileSystem.get(URI.create(csvPath), fsConf)
+    FileSystem
+      .get(
+      URI
+        .create(
+        csvPath),
+      fsConf)
 
     val dataFrameKafkaRecords: DataFrame = spark
       .readStream
@@ -30,6 +35,6 @@ object SparkJob extends App {
       .option("subscribe", topic)
       .csv(csvPath)
 
-        dataFrameKafkaRecords.write.mode(SaveMode.Append).csv(csvPath)
+    dataFrameKafkaRecords.write.mode(SaveMode.Append).csv(csvPath)
   }
 }
