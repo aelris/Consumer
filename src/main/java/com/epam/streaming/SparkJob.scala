@@ -7,8 +7,9 @@ import org.apache.hadoop.fs.{FileSystem, LocalFileSystem}
 import org.apache.hadoop.hdfs.DistributedFileSystem
 import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
 
-object SparkJob {
+object SparkJob extends App {
   private var csvPath = "hdfs://sandbox-hdp.hortonworks.com:8020/homework/streaming/"
+  private var topic = args{0}
 
   def sparkJob() {
 
@@ -26,7 +27,7 @@ object SparkJob {
       .readStream
       .format("kafka")
       .option("kafka.bootstrap.servers", "sandbox-hdp.hortonworks.com:6667")
-      .option("subscribe", "StreamingTopic")
+      .option("subscribe", topic)
       .csv(csvPath)
 
         dataFrameKafkaRecords.write.mode(SaveMode.Append).csv(csvPath)
