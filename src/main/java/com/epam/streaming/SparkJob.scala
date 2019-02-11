@@ -5,8 +5,9 @@ import java.net.URI
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.{FileSystem, LocalFileSystem}
 import org.apache.hadoop.hdfs.DistributedFileSystem
+import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.sql.types.{DataTypes, StructType}
-import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
+import org.apache.spark.sql.{DataFrame, SparkSession}
 
 object SparkJob {
   private var csvPath = "hdfs://sandbox-hdp.hortonworks.com:8020/homework/streaming"
@@ -35,6 +36,10 @@ object SparkJob {
       .schema(schema)
       .csv(csvPath)
 
-    dataFrameKafkaRecords.write.mode(SaveMode.Append).csv(csvPath)
+    dataFrameKafkaRecords.writeStream
+      .outputMode("append")
+      .option("checkpointLocation", "/tmp/streamingCheckpoint")
+      .trigger(Trigger.ProcessingTime(1000*3))
+      .start(csvPath)
   }
 }
