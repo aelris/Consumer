@@ -59,11 +59,6 @@
             <version>2.11.8</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka-streams</artifactId>
-            <version>0.10.0.0</version>
-        </dependency>
 
         <dependency>
             <groupId>org.apache.spark</groupId>
@@ -73,14 +68,14 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka-clients</artifactId>
-            <version>2.1.0</version>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-catalyst_2.11</artifactId>
+            <version>2.3.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-catalyst_2.11</artifactId>
+            <artifactId>spark-sql-kafka-0-10_2.11</artifactId>
             <version>2.3.0</version>
         </dependency>
 
