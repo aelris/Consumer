@@ -35,6 +35,8 @@ object SparkJob {
       .option("subscribe", Consumer.topic)
       .load()
 
-    dataFrameKafkaRecords.writeStream.format("csv").option("path", csvPath).option("checkpointLocation", "/tmp/checkpoint").trigger(Trigger.ProcessingTime(1000*3)).start
+    dataFrameKafkaRecords.writeStream.format("csv").option("path", csvPath)
+      .option("checkpointLocation", "/tmp/checkpoint")
+      .trigger(Trigger.ProcessingTime(1000*3)).start
   }
 }
