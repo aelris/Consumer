@@ -31,10 +31,9 @@ object SparkJob {
       .readStream
       .format("kafka")
       .option("kafka.bootstrap.servers", "sandbox-hdp.hortonworks.com:6667")
-      .option("subscribe", Consumer.topic).load()
-
+      .option("subscribe", Consumer.topic)
+      .load()
 
     dataFrameKafkaRecords.write.mode(SaveMode.Append).csv(csvPath)
-
   }
 }
