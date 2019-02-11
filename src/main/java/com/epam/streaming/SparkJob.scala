@@ -5,6 +5,7 @@ import java.net.URI
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.{FileSystem, LocalFileSystem}
 import org.apache.hadoop.hdfs.DistributedFileSystem
+import org.apache.spark.sql.types.{DataTypes, StructType}
 import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
 
 object SparkJob {
@@ -22,11 +23,16 @@ object SparkJob {
     fsConf.set("fs.file.impl", classOf[LocalFileSystem].getName)
     FileSystem.get(URI.create(csvPath),fsConf)
 
+    val schema = new StructType()
+      .add("offset", DataTypes.LongType)
+      .add("value", DataTypes.StringType)
+
     val dataFrameKafkaRecords: DataFrame = spark
       .readStream
       .format("kafka")
       .option("kafka.bootstrap.servers", "sandbox-hdp.hortonworks.com:6667")
       .option("subscribe", Consumer.topic)
+      .schema(schema)
       .csv(csvPath)
 
     dataFrameKafkaRecords.write.mode(SaveMode.Append).csv(csvPath)
