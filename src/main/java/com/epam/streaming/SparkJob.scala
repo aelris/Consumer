@@ -1,13 +1,14 @@
 package com.epam.streaming
 
-import org.apache.hadoop.conf.Configuration
-import org.apache.hadoop.fs.LocalFileSystem
-import org.apache.hadoop.hdfs.DistributedFileSystem
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import java.net.URI
 
+import org.apache.hadoop.conf.Configuration
+import org.apache.hadoop.fs.{FileSystem, LocalFileSystem}
+import org.apache.hadoop.hdfs.DistributedFileSystem
+import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
 
 object SparkJob {
-  private var csvPath = "hdfs://sandbox-hdp.hortonworks.com:8020/homework/streaming"
+  private var csvPath = "hdfs://sandbox-hdp.hortonworks.com:8020/homework/streaming/"
 
   def sparkJob() {
 
@@ -15,8 +16,7 @@ object SparkJob {
       .builder()
       .master("local")
       .getOrCreate()
-    import org.apache.hadoop.fs.FileSystem
-    import java.net.URI
+
     val fsConf =new Configuration()
     fsConf.set("fs.hdfs.impl", classOf[DistributedFileSystem].getName)
     fsConf.set("fs.file.impl", classOf[LocalFileSystem].getName)
@@ -29,6 +29,6 @@ object SparkJob {
       .option("subscribe", "StreamingTopic")
       .csv(csvPath)
 
-    //    dataFrameKafkaRecords.write.mode(SaveMode.Append).csv(csvPath)
+        dataFrameKafkaRecords.write.mode(SaveMode.Append).csv(csvPath)
   }
 }
