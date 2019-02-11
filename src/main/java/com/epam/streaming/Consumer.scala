@@ -54,7 +54,8 @@ class Consumer(val brokers: String,
 }
 
 object Consumer extends App {
-  val newArgs = Array("sandbox-hdp.hortonworks.com:6667", "consumer-1", args(0))
+  var topic = args(0)
+  val newArgs = Array("sandbox-hdp.hortonworks.com:6667", "consumer-1", topic)
   val example = new Consumer(newArgs(0), newArgs(1), newArgs(2))
   example.run()
   SparkJob.sparkJob()
