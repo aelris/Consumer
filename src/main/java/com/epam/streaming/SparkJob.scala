@@ -35,7 +35,7 @@ object SparkJob {
       .option("subscribe", Consumer.topic)
       .load()
 
-    val value: StreamingQuery = dataFrameKafkaRecords.writeStream.format("csv")
+    val value: StreamingQuery = dataFrameKafkaRecords.coalesce(1).writeStream.format("csv")
       .option("header", "false").option("path", csvPath)
       .option("checkpointLocation", "/tmp/checkpoint")
       .trigger(Trigger.ProcessingTime(1000*3)).start
