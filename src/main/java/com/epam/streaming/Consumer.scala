@@ -45,7 +45,7 @@ class Consumer(val brokers: String,
           val records: ConsumerRecords[String, String] = kafkaConsumer.poll(500)
 
           for (record <- records) {
-            System.out.println("Received message: (" + record.key() + ", " + record.value() + ") at offset " + record.offset())
+            System.out.println("Received message: (" + record.value() + ") at offset " + record.offset())
           }
         }
       }
