@@ -5,7 +5,7 @@ import java.net.URI
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.{FileSystem, LocalFileSystem}
 import org.apache.hadoop.hdfs.DistributedFileSystem
-import org.apache.spark.sql.streaming.Trigger
+import org.apache.spark.sql.streaming.{StreamingQuery, Trigger}
 import org.apache.spark.sql.types.{DataTypes, StructType}
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
@@ -31,13 +31,15 @@ object SparkJob {
     val dataFrameKafkaRecords: DataFrame = spark
       .readStream
       .format("kafka")
-      .schema(schema)
       .option("kafka.bootstrap.servers", "sandbox-hdp.hortonworks.com:6667")
       .option("subscribe", Consumer.topic)
       .load()
 
-    dataFrameKafkaRecords.writeStream.format("csv").option("header", "false").option("path", csvPath)
+    val value: StreamingQuery = dataFrameKafkaRecords.writeStream.format("csv")
+      .option("header", "false").option("path", csvPath)
       .option("checkpointLocation", "/tmp/checkpoint")
       .trigger(Trigger.ProcessingTime(1000*3)).start
+
+    value.awaitTermination()
   }
 }
