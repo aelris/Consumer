@@ -31,6 +31,7 @@ object SparkJob {
     val dataFrameKafkaRecords: DataFrame = spark
       .readStream
       .format("kafka")
+      .schema(schema)
       .option("kafka.bootstrap.servers", "sandbox-hdp.hortonworks.com:6667")
       .option("subscribe", Consumer.topic)
       .load()
