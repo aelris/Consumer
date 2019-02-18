@@ -1,12 +1,10 @@
 package com.epam.streaming
 
-
 import java.util.concurrent._
 import java.util.{Collections, Properties}
-
 import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecords, KafkaConsumer}
-
 import scala.collection.JavaConversions._
+
 
 class Consumer(val brokers: String,
                val groupId: String,
@@ -52,11 +50,18 @@ class Consumer(val brokers: String,
     })
   }
 }
-
+//Main
 object Consumer extends App {
-  var topic = args(0)
-  val newArgs = Array("sandbox-hdp.hortonworks.com:6667", "consumer-1", topic)
-  val example = new Consumer(newArgs(0), newArgs(1), newArgs(2))
-  example.run()
+
+  //params for consumer
+  val topic = args(0)
+  val broker ="sandbox-hdp.hortonworks.com:6667"
+  val groupid ="consumer-1"
+
+  //consumer
+  val consumer = new Consumer(broker,groupid,topic)
+  consumer.run()
+
+  //running sparkJob for reading topic and write strokes to HDFS
   SparkJob.sparkJob()
 }
